@@ -1,3 +1,4 @@
+require 'pry'
 ActiveAdmin.register Physician do
 
   # See permitted parameters documentation:
@@ -14,6 +15,22 @@ ActiveAdmin.register Physician do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
+  controller do
+    def update
+       params[:physician][:patients_attributes].each do |p|
+         appt_obj = Appointment.find_or_initialize_by(patient_id: p[1][:id] , physician_id: resource.id)
+         appt_obj.save
+       end
+       super
+    end
+    def update_name
+      patient_obj = Patient.find(params[:patient_id])
+      respond_to do |format|
+      format.html
+      format.json { render json: { "patient" => patient_obj} }
+    end
+    end
+  end
 
   show do
     attributes_table do
@@ -35,11 +52,11 @@ ActiveAdmin.register Physician do
       f.input :name
     end
     f.inputs do
-      f.has_many :patients , new_record: false, allow_destroy: true do |t|
-        t.input :id , input_html: { readonly: true }
+      f.has_many :patients, allow_destroy: true do |t|
+        t.input :id ,label: 'Patient_id',as: :select ,collection: Patient.all.ids
         t.input :name
       end
     end
-    actions
+    f.actions
   end
 end

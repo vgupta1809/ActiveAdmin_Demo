@@ -18,10 +18,10 @@ ActiveAdmin.register Appointment do
     id_column
     column :name
     column 'Patient_id' , :patient_id do |row|
-     link_to row.patient_id, admin_patient_path(row)
+     link_to row.patient_id, admin_patient_path(row.patient_id)
    end
     column 'Physician_id' , :physician_id do |row|
-      link_to row.physician_id, admin_physician_path(row)
+      link_to row.physician_id, admin_physician_path(row.physician_id)
     end
     column :created_at
     column :updated_at

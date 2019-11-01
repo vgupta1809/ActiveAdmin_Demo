@@ -34,11 +34,11 @@ ActiveAdmin.register Patient do
       f.input :name
     end
     f.inputs do
-      f.has_many :physicians , new_record: false, allow_destroy: true do |t|
+      f.has_many :physicians , allow_destroy: true do |t|
         t.input :id , input_html: { readonly: true }
         t.input :name
       end
     end
-    actions
+    f.actions
   end
 end
